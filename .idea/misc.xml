@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/BudgetTracker/app/src/main/res/layout/activity_main.xml" value="0.20108695652173914" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/BudgetTracker/app/src/main/res/layout/add_transaction_activity.xml" value="0.16822916666666668" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/BudgetTracker/app/src/main/res/layout/budget_list_item.xml" value="0.23278985507246377" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/BudgetTracker/app/src/main/res/layout/fragment_add_transaction.xml" value="0.146875" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/BudgetTracker/app/src/main/res/layout/fragment_budget.xml" value="0.20108695652173914" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/BudgetTracker/app/src/main/res/layout/fragment_budget_item.xml" value="0.16927083333333334" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/BudgetTracker/app/src/main/res/layout/fragment_detail.xml" value="0.26875" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/BudgetTracker/app/src/main/res/layout/fragment_main_budget.xml" value="0.14583333333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

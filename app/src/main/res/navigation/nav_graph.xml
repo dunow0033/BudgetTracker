@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentMainBudget">
+
+    <fragment
+        android:id="@+id/fragmentMainBudget"
+        android:name="com.example.budgettracker.ui.fragments.MainBudgetFragment"
+        android:label="Main Budget Page"
+        tools:layout="@layout/fragment_main_budget">
+        <action
+            android:id="@+id/mainBudgetToAddTransactionFragment"
+            app:destination="@id/AddTransactionFragment" />
+        <action
+            android:id="@+id/mainBudgetToDetailFragment"
+            app:destination="@id/DetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/AddTransactionFragment"
+        android:name="com.example.budgettracker.ui.fragments.AddTransactionFragment"
+        android:label="Add Transaction"
+        tools:layout="@layout/fragment_add_transaction">
+        <action
+            android:id="@+id/AddTransactionFragmentToMainBudget"
+            app:destination="@id/fragmentMainBudget" />
+    </fragment>
+    <fragment
+        android:id="@+id/DetailFragment"
+        android:name="com.example.budgettracker.ui.fragments.DetailFragment"
+        android:label="Detail Transaction"
+        tools:layout="@layout/fragment_detail">
+        <action
+            android:id="@+id/DetailFragmentToMainBudget"
+            app:destination="@id/fragmentMainBudget" />
+    </fragment>
+</navigation>
