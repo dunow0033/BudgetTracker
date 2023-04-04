@@ -38,7 +38,7 @@ class MainBudgetFragment : Fragment() {
     private val binding: FragmentMainBudgetBinding get() = _binding!!
 
     private lateinit var deletedBudget: Budget
-    private lateinit var budgets : List<Budget>
+    //private lateinit var budgets : List<Budget>
     private lateinit var oldBudgets : List<Budget>
     private lateinit var budgetAdapter: BudgetAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -65,7 +65,7 @@ class MainBudgetFragment : Fragment() {
 
         //budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
 
-        budgets = listOf()
+        //budgets = listOf()
 
         budgetDatabase = Room.databaseBuilder(requireContext(),
         BudgetDatabase::class.java,
@@ -103,11 +103,11 @@ class MainBudgetFragment : Fragment() {
                 findNavController().navigate(R.id.mainBudgetToAddTransactionFragment)
             }
 
-           budgetViewModel.budgetItems.observe(viewLifecycleOwner, Observer {
+           budgetViewModel.budgetItems.observe(viewLifecycleOwner) {
                 budgetAdapter.differ.submitList(it)
-            })
+            }
 
-        budgetAdapter = BudgetAdapter(budgets)
+        budgetAdapter = BudgetAdapter()
         linearLayoutManager = LinearLayoutManager(requireContext())
 
         binding.recyclerview.apply {
@@ -115,75 +115,75 @@ class MainBudgetFragment : Fragment() {
             layoutManager = linearLayoutManager
         }
 
-        fetchAll()
+        //fetchAll()
     }
 
     @DelicateCoroutinesApi
     private fun fetchAll() {
         GlobalScope.launch {
 
-            budgets = budgetDatabase.getBudgetDao().getBudgetItems()
+            //budgets = budgetDatabase.getBudgetDao().getBudgetItems()
 
             requireActivity().runOnUiThread{
-                updateDashboard()
+                //updateDashboard()
                 //budgetAdapter.setData(budgets)
             }
         }
     }
 
-    private fun updateDashboard() {
-        val totalAmount = budgets.map { it.amount }.sum()
-        val budgetAmount = budgets.filter { it.amount!! > 0 }.map{ it.amount }.sum()
-        val expenseAmount = totalAmount - budgetAmount
+//    private fun updateDashboard() {
+//        val totalAmount = budgets.map { it.amount }.sum()
+//        val budgetAmount = budgets.filter { it.amount!! > 0 }.map{ it.amount }.sum()
+//        val expenseAmount = totalAmount - budgetAmount
+//
+//        binding.balance.text = "$ %.2f".format(totalAmount)
+//        binding.budget.text = "$ %.2f".format(budgetAmount)
+//        binding.expense.text = "$ %.2f".format(expenseAmount)
+//    }
 
-        binding.balance.text = "$ %.2f".format(totalAmount)
-        binding.budget.text = "$ %.2f".format(budgetAmount)
-        binding.expense.text = "$ %.2f".format(expenseAmount)
-    }
+//    @DelicateCoroutinesApi
+//    private fun undoDelete() {
+//        GlobalScope.launch {
+//            budgetDatabase.getBudgetDao().insertAll(deletedBudget)
+//
+//            budgets = oldBudgets
+//
+//            requireActivity().runOnUiThread{
+//                budgetAdapter.setData(budgets)
+//                updateDashboard()
+//            }
+//        }
+//    }
 
-    @DelicateCoroutinesApi
-    private fun undoDelete() {
-        GlobalScope.launch {
-            budgetDatabase.getBudgetDao().insertAll(deletedBudget)
+//    private fun showSnackBar() {
+//        val view = binding.coordinator
+//
+//        val snackbar = Snackbar.make(view, "Transaction deleted!!", Snackbar.LENGTH_LONG)
+//        snackbar.setAction("Undo") {
+//            undoDelete()
+//        }
+//            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+//            .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+//            .show()
+//    }
 
-            budgets = oldBudgets
-
-            requireActivity().runOnUiThread{
-                budgetAdapter.setData(budgets)
-                updateDashboard()
-            }
-        }
-    }
-
-    private fun showSnackBar() {
-        val view = binding.coordinator
-
-        val snackbar = Snackbar.make(view, "Transaction deleted!!", Snackbar.LENGTH_LONG)
-        snackbar.setAction("Undo") {
-            undoDelete()
-        }
-            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-            .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            .show()
-    }
-
-    @DelicateCoroutinesApi
-    private fun deleteTransaction(budget: Budget) {
-        deletedBudget = budget
-        oldBudgets = budgets
-
-        GlobalScope.launch {
-            budgetViewModel.deleteBudgetItem(budget)
-
-            budgets = budgets.filter { it.id != budget.id }
-
-            requireActivity().runOnUiThread{
-                updateDashboard()
-                budgetAdapter.setData(budgets)
-                showSnackBar()
-            }
-        }
-    }
+//    @DelicateCoroutinesApi
+//    private fun deleteTransaction(budget: Budget) {
+//        deletedBudget = budget
+//        oldBudgets = budgets
+//
+//        GlobalScope.launch {
+//            budgetViewModel.deleteBudgetItem(budget)
+//
+//            budgets = budgets.filter { it.id != budget.id }
+//
+//            requireActivity().runOnUiThread{
+//                updateDashboard()
+//                budgetAdapter.setData(budgets)
+//                showSnackBar()
+//            }
+//        }
+//    }
 
 //    override fun onResume() {
 //        super.onResume()

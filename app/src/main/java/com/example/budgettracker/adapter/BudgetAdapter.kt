@@ -14,7 +14,8 @@ import com.example.budgettracker.model.Budget
 import com.example.budgettracker.ui.fragments.DetailFragment
 import com.example.budgettracker.ui.fragments.MainBudgetFragment
 
-class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+//class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+class BudgetAdapter() : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BudgetViewHolder {
         return BudgetViewHolder(
@@ -27,9 +28,9 @@ class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<Bu
     }
 
     override fun onBindViewHolder(holder: BudgetViewHolder, position: Int) {
-        holder.bind(budgets[holder.bindingAdapterPosition])
+        holder.bind(differ.currentList[holder.adapterPosition])
 
-        val transaction = budgets[position]
+        val transaction = differ.currentList[holder.adapterPosition]
         val context = holder.binding.amount.context
 
         if(transaction.amount!! >= 0){
@@ -54,7 +55,7 @@ class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<Bu
     }
 
     override fun getItemCount(): Int {
-        return budgets.size
+        return differ.currentList.size
     }
 
     private val differCallback = object : DiffUtil.ItemCallback<Budget>() {
@@ -81,9 +82,9 @@ class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<Bu
         }
     }
 
-    fun setData(budgets: List<Budget>){
-        this.budgets = budgets
-        notifyDataSetChanged()
-    }
+//    fun setData(budgets: List<Budget>){
+//        this.budgets = budgets
+//        notifyDataSetChanged()
+//    }
 
 }
