@@ -51,8 +51,6 @@ class MainBudgetFragment : Fragment() {
         )
     }
 
-     //private lateinit var budgetViewModel: BudgetViewModel
-
 //
 //    private val budgetAdapter: BudgetAdapter by lazy {
 //        BudgetAdapter(viewModel)
