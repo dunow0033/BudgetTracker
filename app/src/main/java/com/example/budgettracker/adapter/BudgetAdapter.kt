@@ -14,8 +14,8 @@ import com.example.budgettracker.model.Budget
 import com.example.budgettracker.ui.fragments.DetailFragment
 import com.example.budgettracker.ui.fragments.MainBudgetFragment
 
-//class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
-class BudgetAdapter() : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+//class BudgetAdapter() : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BudgetViewHolder {
         return BudgetViewHolder(
@@ -28,15 +28,15 @@ class BudgetAdapter() : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: BudgetViewHolder, position: Int) {
-        holder.bind(differ.currentList[holder.adapterPosition])
+        holder.bind(differ.currentList[holder.bindingAdapterPosition])
 
-        val transaction = differ.currentList[holder.adapterPosition]
+        val transaction = differ.currentList[holder.bindingAdapterPosition]
         val context = holder.binding.amount.context
 
         if(transaction.amount!! >= 0){
             holder.binding.amount.text = "+ $%.2f".format(transaction.amount)
             holder.binding.amount.setTextColor(ContextCompat.getColor(context, R.color.green))
-        }else {
+        } else {
             holder.binding.amount.text = "- $%.2f".format(Math.abs(transaction.amount!!))
             holder.binding.amount.setTextColor(ContextCompat.getColor(context, R.color.red))
         }
@@ -49,9 +49,9 @@ class BudgetAdapter() : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
 //            context.startActivity(intent)
 //        }
 
-//        holder.itemView.setOnClickListener {
-//            findNavController(MainBudgetFragment()).navigate(R.id.mainBudgetToDetailFragment)
-//        }
+        holder.itemView.setOnClickListener {
+            findNavController().navigate(R.id.mainBudgetToDetailFragment)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -14,9 +14,9 @@ class BudgetRepository(private val db: BudgetDatabase) {
             db.getBudgetDao().insertBudgetItem(budget)
         }
 
-//    fun getBudgetItems(): List<Budget> {
-//        return db.getBudgetDao().readAllData()
-//    }
+    fun getBudgetItems(): List<Budget> {
+        return db.getBudgetDao().getBudgetItems()
+    }
 
     suspend fun deleteBudgetItem(budget: Budget) {
         db.getBudgetDao().deleteBudget(budget)

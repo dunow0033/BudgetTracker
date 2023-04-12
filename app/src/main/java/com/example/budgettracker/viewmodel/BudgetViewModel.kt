@@ -28,6 +28,10 @@ class BudgetViewModel(app: Application, val repo: BudgetRepository) : AndroidVie
         }
     }
 
+    fun getBudgetItems(): List<Budget> {
+        return repo.getBudgetItems()
+    }
+
 //    fun getAllBudgetItems() {
 //        val budgetDao = BudgetDatabase.getAppDatabase(getApplication())?.getBudgetDao()
 //        val list = budgetDao?.getBudgetItems()
@@ -50,7 +54,7 @@ class BudgetViewModel(app: Application, val repo: BudgetRepository) : AndroidVie
 //    }
 
     fun deleteBudgetItem(budget: Budget) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.deleteBudgetItem(budget)
         }
     }

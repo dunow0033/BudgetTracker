@@ -13,10 +13,10 @@ interface BudgetDao {
     @Insert
     fun insertAll(vararg budget: Budget)
 
-    @Query("SELECT * FROM budget_items ORDER BY id ASC")
+    @Query("SELECT * FROM budget_items")
     fun getBudgetItems(): List<Budget>
 
-    @Query("SELECT * FROM budget_items")
+    @Query("SELECT * FROM budget_items ORDER BY id ASC")
     fun readAllData(): Flow<List<Budget>>
 
     @Delete

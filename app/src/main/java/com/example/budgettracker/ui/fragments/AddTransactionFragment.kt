@@ -11,8 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.room.Room
 import com.example.budgettracker.R
+import com.example.budgettracker.adapter.BudgetAdapter
 //import androidx.lifecycle.ViewModelProvider
 import com.example.budgettracker.databinding.FragmentAddTransactionBinding
+import com.example.budgettracker.databinding.FragmentMainBudgetBinding
 import com.example.budgettracker.db.BudgetDatabase
 import com.example.budgettracker.model.Budget
 import com.example.budgettracker.repository.BudgetRepository
@@ -28,6 +30,10 @@ class AddTransactionFragment : Fragment() {
 
     private var _binding: FragmentAddTransactionBinding? = null
     private val binding: FragmentAddTransactionBinding get() = _binding!!
+
+    private lateinit var budgets : List<Budget>
+
+    private lateinit var budgetAdapter : BudgetAdapter
 
 //    private var label = binding.labelInput.text.toString()
 //    private var amount = binding.amountInput.text.toString().toDoubleOrNull()
@@ -51,6 +57,7 @@ class AddTransactionFragment : Fragment() {
         _binding = FragmentAddTransactionBinding.inflate(inflater, container, false)
 
         //budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
+        budgets = arrayListOf()
 
         labelLayout = binding.labelLayout
         amountLayout = binding.amountLayout
@@ -60,6 +67,8 @@ class AddTransactionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        budgetAdapter = BudgetAdapter(budgets)
 
         binding.addTransactionBtn.setOnClickListener {
             val label = binding.labelInput.text.toString()
@@ -83,7 +92,7 @@ class AddTransactionFragment : Fragment() {
                 amountLayout.error = "Please enter a valid amount!!"
 
             else {
-                val budget = Budget(0, label, amount, description)
+                val budget = Budget(label = label, amount = amount, description = description)
                 insert(budget)
             }
 
@@ -105,11 +114,11 @@ class AddTransactionFragment : Fragment() {
 //            BudgetDatabase::class.java,
 //            "budgets").build()
 
-        //GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(Dispatchers.Main) {
             budgetViewModel.addBudgetItem(budget)
             //budgetDatabase.getBudgetDao().insertAll(budget)
 
             findNavController().navigate(R.id.AddTransactionFragmentToMainBudget)
-        //}
+        }
     }
 }

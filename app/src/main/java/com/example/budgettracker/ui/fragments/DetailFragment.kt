@@ -26,18 +26,18 @@ class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding: FragmentDetailBinding get() = _binding!!
 
-    private lateinit var budgetViewModel: BudgetViewModel
+    //private lateinit var budgetViewModel: BudgetViewModel
 
-//    private var label = binding.labelInput.text.toString()
-//    private var amount = binding.amountInput.text.toString().toDoubleOrNull()
-//    private var description = binding.descriptionInput.text.toString()
+    private var label = binding.labelInput.text.toString()
+    private var amount = binding.amountInput.text.toString().toDoubleOrNull()
+    private var description = binding.descriptionInput.text.toString()
 
-//    private val budgetViewModel: BudgetViewModel by viewModels {
-//        BudgetViewModelFactory(
-//            requireActivity().application,
-//            BudgetRepository(BudgetDatabase(requireActivity()))
-//        )
-//    }
+    private val budgetViewModel: BudgetViewModel by viewModels {
+        BudgetViewModelFactory(
+            requireActivity().application,
+            BudgetRepository(BudgetDatabase(requireActivity()))
+        )
+    }
 
     private lateinit var labelLayout: TextInputLayout
     private lateinit var amountLayout: TextInputLayout
@@ -49,7 +49,7 @@ class DetailFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
 
-        budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
+        //budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
 
         labelLayout = binding.labelLayout
         amountLayout = binding.amountLayout
@@ -94,7 +94,7 @@ class DetailFragment : Fragment() {
         }
 
         binding.closeBtn.setOnClickListener {
-            findNavController().navigate(R.id.AddTransactionFragmentToMainBudget)
+            findNavController().navigate(R.id.DetailFragmentToMainBudget)
         }
     }
 
@@ -107,7 +107,7 @@ class DetailFragment : Fragment() {
             budgetViewModel.updateBudgetItem(budget)
             //budgetDatabase.getBudgetDao().insertAll(budget)
 
-            findNavController().navigate(R.id.AddTransactionFragmentToMainBudget)
+            findNavController().navigate(R.id.DetailFragmentToMainBudget)
         }
     }
 }

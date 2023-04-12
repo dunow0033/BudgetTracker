@@ -2,7 +2,14 @@ package com.example.budgettracker.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.room.Room
 import com.example.budgettracker.databinding.ActivityMainBinding
+import com.example.budgettracker.db.BudgetDatabase
+import com.example.budgettracker.model.Budget
+import com.example.budgettracker.ui.fragments.MainBudgetFragment
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,4 +38,5 @@ class MainActivity : AppCompatActivity() {
 //        recyclerView.adapter = adapter
 //        recyclerView.layoutManager = LinearLayoutManager(this)
 //    }
+
 }

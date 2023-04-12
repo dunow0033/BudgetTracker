@@ -10,10 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.budgettracker.model.Budget
 import com.example.budgettracker.utils.DB_NAME
 
-
-
-
-@Database(entities = [Budget::class], version = 1, exportSchema = false)
+@Database(entities = arrayOf(Budget::class), version = 1)
 abstract class BudgetDatabase : RoomDatabase() {
 
     abstract fun getBudgetDao(): BudgetDao

@@ -30,6 +30,7 @@ import com.example.budgettracker.viewmodel.BudgetViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MainBudgetFragment : Fragment() {
@@ -38,7 +39,7 @@ class MainBudgetFragment : Fragment() {
     private val binding: FragmentMainBudgetBinding get() = _binding!!
 
     private lateinit var deletedBudget: Budget
-    //private lateinit var budgets : List<Budget>
+    private lateinit var budgets : List<Budget>
     private lateinit var oldBudgets : List<Budget>
     private lateinit var budgetAdapter: BudgetAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -51,9 +52,8 @@ class MainBudgetFragment : Fragment() {
         )
     }
 
-//
 //    private val budgetAdapter: BudgetAdapter by lazy {
-//        BudgetAdapter(viewModel)
+//        BudgetAdapter()
 //    }
 
     override fun onCreateView(
@@ -65,7 +65,7 @@ class MainBudgetFragment : Fragment() {
 
         //budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
 
-        //budgets = listOf()
+        budgets = arrayListOf()
 
         budgetDatabase = Room.databaseBuilder(requireContext(),
         BudgetDatabase::class.java,
@@ -78,37 +78,40 @@ class MainBudgetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        transactionAdapter = TransactionAdapter(transactions)
-//        linearLayoutManager = LinearLayoutManager(this)
+       //budgets = budgetDatabase.getBudgetDao().getBudgetItems()
+
+        budgetAdapter = BudgetAdapter(budgets)
+        linearLayoutManager = LinearLayoutManager(context)
 
             // swipe to remove
-//            val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-//                override fun onMove(
-//                    recyclerView: RecyclerView,
-//                    viewHolder: RecyclerView.ViewHolder,
-//                    target: RecyclerView.ViewHolder
-//                ): Boolean {
-//                    return false
-//                }
-//
-//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                    deleteTransaction(budgets[viewHolder.adapterPosition])
-//                }
-//            }
-//
-//            val swipeHelper = ItemTouchHelper(itemTouchHelper)
-//            swipeHelper.attachToRecyclerView(binding.recyclerview)
+            val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    //deleteTransaction(budgets[viewHolder.bindingAdapterPosition])
+
+                    val budget = budgetAdapter.differ.currentList[viewHolder.bindingAdapterPosition]
+                    deleteTransaction(budget)
+                    //budgetViewModel.deleteBudgetItem(budgetAdapter.differ.currentList[viewHolder.bindingAdapterPosition])
+                }
+            }
+
+            val swipeHelper = ItemTouchHelper(itemTouchHelper)
+            swipeHelper.attachToRecyclerView(binding.recyclerview)
 
             binding.addBtn.setOnClickListener {
                 findNavController().navigate(R.id.mainBudgetToAddTransactionFragment)
             }
 
-           budgetViewModel.budgetItems.observe(viewLifecycleOwner) {
+            budgetViewModel.budgetItems.observe(viewLifecycleOwner) {
                 budgetAdapter.differ.submitList(it)
             }
-
-        budgetAdapter = BudgetAdapter()
-        linearLayoutManager = LinearLayoutManager(requireContext())
 
         binding.recyclerview.apply {
             adapter = budgetAdapter
@@ -124,69 +127,76 @@ class MainBudgetFragment : Fragment() {
 
             //budgets = budgetDatabase.getBudgetDao().getBudgetItems()
 
+            budgets = budgetViewModel.getBudgetItems()
+
+            //budgets = budgetAdapter.differ.currentList
+
             requireActivity().runOnUiThread{
-                //updateDashboard()
-                //budgetAdapter.setData(budgets)
+//                budgetAdapter.setData(budgets)
+                updateDashboard()
             }
         }
     }
 
-//    private fun updateDashboard() {
-//        val totalAmount = budgets.map { it.amount }.sum()
-//        val budgetAmount = budgets.filter { it.amount!! > 0 }.map{ it.amount }.sum()
-//        val expenseAmount = totalAmount - budgetAmount
-//
-//        binding.balance.text = "$ %.2f".format(totalAmount)
-//        binding.budget.text = "$ %.2f".format(budgetAmount)
-//        binding.expense.text = "$ %.2f".format(expenseAmount)
-//    }
+    private fun updateDashboard() {
+        val totalAmount = budgets.map { it.amount }.sum()
+        val budgetAmount = budgets.filter { it.amount!! > 0 }.map{ it.amount }.sum()
+        val expenseAmount = totalAmount - budgetAmount
 
-//    @DelicateCoroutinesApi
-//    private fun undoDelete() {
-//        GlobalScope.launch {
-//            budgetDatabase.getBudgetDao().insertAll(deletedBudget)
-//
-//            budgets = oldBudgets
-//
-//            requireActivity().runOnUiThread{
+        binding.balance.text = "$ %.2f".format(totalAmount)
+        binding.budget.text = "$ %.2f".format(budgetAmount)
+        binding.expense.text = "$ %.2f".format(expenseAmount)
+    }
+
+    @DelicateCoroutinesApi
+    private fun undoDelete() {
+        GlobalScope.launch {
+            //budgetDatabase.getBudgetDao().insertAll(deletedBudget)
+            budgetViewModel.addBudgetItem(deletedBudget)
+
+            budgets = oldBudgets
+
+            requireActivity().runOnUiThread{
+                //budgetAdapter.setData(budgets)
+                updateDashboard()
+            }
+        }
+    }
+
+    @DelicateCoroutinesApi
+    private fun showSnackBar() {
+        val view = binding.coordinator
+
+        val snackbar = Snackbar.make(view, "Transaction deleted!!", Snackbar.LENGTH_LONG)
+        snackbar.setAction("Undo") {
+            undoDelete()
+        }
+            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            .show()
+    }
+
+    @DelicateCoroutinesApi
+    private fun deleteTransaction(budget: Budget) {
+        deletedBudget = budget
+        oldBudgets = budgetAdapter.differ.currentList
+
+        GlobalScope.launch {
+            budgetViewModel.deleteBudgetItem(budget)
+
+            budgets = budgets.filter { it.id != budget.id }
+
+            requireActivity().runOnUiThread{
+                updateDashboard()
 //                budgetAdapter.setData(budgets)
-//                updateDashboard()
-//            }
-//        }
-//    }
+                showSnackBar()
+            }
+        }
+    }
 
-//    private fun showSnackBar() {
-//        val view = binding.coordinator
-//
-//        val snackbar = Snackbar.make(view, "Transaction deleted!!", Snackbar.LENGTH_LONG)
-//        snackbar.setAction("Undo") {
-//            undoDelete()
-//        }
-//            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-//            .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-//            .show()
-//    }
-
-//    @DelicateCoroutinesApi
-//    private fun deleteTransaction(budget: Budget) {
-//        deletedBudget = budget
-//        oldBudgets = budgets
-//
-//        GlobalScope.launch {
-//            budgetViewModel.deleteBudgetItem(budget)
-//
-//            budgets = budgets.filter { it.id != budget.id }
-//
-//            requireActivity().runOnUiThread{
-//                updateDashboard()
-//                budgetAdapter.setData(budgets)
-//                showSnackBar()
-//            }
-//        }
-//    }
-
-//    override fun onResume() {
-//        super.onResume()
-//
-//    }
+    @DelicateCoroutinesApi
+    override fun onResume() {
+        super.onResume()
+        fetchAll()
+    }
 }
