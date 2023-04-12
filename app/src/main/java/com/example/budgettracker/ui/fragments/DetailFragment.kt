@@ -18,6 +18,7 @@ import com.example.budgettracker.repository.BudgetRepository
 import com.example.budgettracker.viewmodel.BudgetViewModel
 import com.example.budgettracker.viewmodel.BudgetViewModelFactory
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -28,9 +29,9 @@ class DetailFragment : Fragment() {
 
     //private lateinit var budgetViewModel: BudgetViewModel
 
-    private var label = binding.labelInput.text.toString()
-    private var amount = binding.amountInput.text.toString().toDoubleOrNull()
-    private var description = binding.descriptionInput.text.toString()
+//    private var label = binding.labelInput.text.toString()
+//    private var amount = binding.amountInput.text.toString().toDoubleOrNull()
+//    private var description = binding.descriptionInput.text.toString()
 
     private val budgetViewModel: BudgetViewModel by viewModels {
         BudgetViewModelFactory(
@@ -57,6 +58,7 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    @DelicateCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -84,7 +86,7 @@ class DetailFragment : Fragment() {
                 amountLayout.error = "Please enter a valid amount!!"
 
             else {
-                val budget = Budget(0, label, amount, description)
+                val budget = Budget(label = label, amount = amount, description = description)
                 update(budget)
             }
 
@@ -98,6 +100,7 @@ class DetailFragment : Fragment() {
         }
     }
 
+    @DelicateCoroutinesApi
     private fun update(budget: Budget) {
 //        val budgetDatabase = Room.databaseBuilder(requireContext(),
 //            BudgetDatabase::class.java,

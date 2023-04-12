@@ -3,6 +3,7 @@ package com.example.budgettracker.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -50,7 +51,7 @@ class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<Bu
 //        }
 
         holder.itemView.setOnClickListener {
-            findNavController().navigate(R.id.mainBudgetToDetailFragment)
+            holder.itemView.findNavController().navigate(R.id.mainBudgetToDetailFragment)
         }
     }
 
