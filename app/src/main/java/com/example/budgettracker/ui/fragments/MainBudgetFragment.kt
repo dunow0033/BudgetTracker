@@ -200,4 +200,9 @@ class MainBudgetFragment : Fragment() {
         super.onResume()
         fetchAll()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

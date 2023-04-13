@@ -1,12 +1,14 @@
 package com.example.budgettracker.ui.fragments
 
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.getSystemService
 import androidx.core.widget.addTextChangedListener
@@ -50,6 +52,7 @@ class DetailFragment : Fragment() {
 
     private lateinit var labelLayout: TextInputLayout
     private lateinit var amountLayout: TextInputLayout
+    private lateinit var updateBtn: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +65,7 @@ class DetailFragment : Fragment() {
 
         labelLayout = binding.labelLayout
         amountLayout = binding.amountLayout
+        updateBtn = binding.updateBtn
 
         return binding.root
     }
@@ -93,7 +97,7 @@ class DetailFragment : Fragment() {
             }
 
             binding.amountInput.addTextChangedListener {
-                binding.updateBtn.visibility = View.VISIBLE
+                updateBtn.visibility = View.VISIBLE
                 if(it!!.isNotEmpty())
                     amountLayout.error = null
             }
@@ -135,5 +139,10 @@ class DetailFragment : Fragment() {
 
             findNavController().navigate(R.id.DetailFragmentToMainBudget)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

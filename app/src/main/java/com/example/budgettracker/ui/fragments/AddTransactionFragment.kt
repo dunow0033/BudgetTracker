@@ -131,4 +131,9 @@ class AddTransactionFragment : Fragment() {
             findNavController().navigate(R.id.AddTransactionFragmentToMainBudget)
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
