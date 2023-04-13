@@ -24,6 +24,7 @@ import com.example.budgettracker.viewmodel.BudgetViewModel
 import com.example.budgettracker.viewmodel.BudgetViewModelFactory
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -57,10 +58,6 @@ class DetailFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
 
-        binding.labelInput.setText(args.budget.label)
-        binding.amountInput.setText(args.budget.amount.toString())
-        binding.descriptionInput.setText(args.budget.description)
-
         //budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
 
         labelLayout = binding.labelLayout
@@ -73,6 +70,10 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.labelInput.setText(args.budget.label)
+        binding.amountInput.setText(args.budget.amount.toString())
+        binding.descriptionInput.setText(args.budget.description)
+
         binding.rootView.setOnClickListener {
             requireActivity().window.decorView.clearFocus()
 
@@ -83,17 +84,17 @@ class DetailFragment : Fragment() {
         binding.updateBtn.setOnClickListener {
             val label = binding.labelInput.text.toString()
             val description = binding.descriptionInput.text.toString()
-            val amount = binding.amountInput.text.toString().toDouble()
+            val amount = binding.amountInput.text.toString().toDoubleOrNull()
 
             binding.labelInput.addTextChangedListener {
                 binding.updateBtn.visibility = View.VISIBLE
-                if(it!!.count() > 0)
+                if(it!!.isNotEmpty())
                     labelLayout.error = null
             }
 
             binding.amountInput.addTextChangedListener {
                 binding.updateBtn.visibility = View.VISIBLE
-                if(it!!.count() > 0)
+                if(it!!.isNotEmpty())
                     amountLayout.error = null
             }
 
@@ -128,7 +129,7 @@ class DetailFragment : Fragment() {
 //            BudgetDatabase::class.java,
 //            "budgets").build()
 
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.Main) {
             budgetViewModel.updateBudgetItem(budget)
             //budgetDatabase.getBudgetDao().insertAll(budget)
 

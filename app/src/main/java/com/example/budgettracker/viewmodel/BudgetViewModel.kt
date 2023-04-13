@@ -60,7 +60,7 @@ class BudgetViewModel(app: Application, val repo: BudgetRepository) : AndroidVie
     }
 //
     fun updateBudgetItem(budget: Budget) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.updateBudgetItem(budget)
         }
     }

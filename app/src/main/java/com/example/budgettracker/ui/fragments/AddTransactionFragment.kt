@@ -1,9 +1,11 @@
 package com.example.budgettracker.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -68,20 +70,27 @@ class AddTransactionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rootView.setOnClickListener {
+            requireActivity().window.decorView.clearFocus()
+
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+
         budgetAdapter = BudgetAdapter()
 
         binding.addTransactionBtn.setOnClickListener {
             val label = binding.labelInput.text.toString()
             val description = binding.descriptionInput.text.toString()
-            val amount = binding.amountInput.text.toString().toDouble()
+            val amount = binding.amountInput.text.toString().toDoubleOrNull()
 
             binding.labelInput.addTextChangedListener {
-                if(it!!.count() > 0)
+                if(it!!.isNotEmpty())
                     labelLayout.error = null
             }
 
             binding.amountInput.addTextChangedListener {
-                if(it!!.count() > 0)
+                if(it!!.isNotEmpty())
                     amountLayout.error = null
             }
 
