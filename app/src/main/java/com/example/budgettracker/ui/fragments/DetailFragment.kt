@@ -1,14 +1,19 @@
 package com.example.budgettracker.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.budgettracker.R
 import com.example.budgettracker.databinding.FragmentAddTransactionBinding
 import com.example.budgettracker.databinding.FragmentDetailBinding
@@ -26,6 +31,8 @@ class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding: FragmentDetailBinding get() = _binding!!
+
+    private val args by navArgs<DetailFragmentArgs>()
 
     //private lateinit var budgetViewModel: BudgetViewModel
 
@@ -50,6 +57,10 @@ class DetailFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
 
+        binding.labelInput.setText(args.budget.label)
+        binding.amountInput.setText(args.budget.amount.toString())
+        binding.descriptionInput.setText(args.budget.description)
+
         //budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
 
         labelLayout = binding.labelLayout
@@ -61,6 +72,13 @@ class DetailFragment : Fragment() {
     @DelicateCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.rootView.setOnClickListener {
+            requireActivity().window.decorView.clearFocus()
+
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
 
         binding.updateBtn.setOnClickListener {
             val label = binding.labelInput.text.toString()
@@ -77,6 +95,10 @@ class DetailFragment : Fragment() {
                 binding.updateBtn.visibility = View.VISIBLE
                 if(it!!.count() > 0)
                     amountLayout.error = null
+            }
+
+            binding.descriptionInput.addTextChangedListener {
+                binding.updateBtn.visibility = View.VISIBLE
             }
 
             if(label.isEmpty())

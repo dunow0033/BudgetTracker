@@ -14,9 +14,10 @@ import com.example.budgettracker.databinding.BudgetListItemBinding
 import com.example.budgettracker.model.Budget
 import com.example.budgettracker.ui.fragments.DetailFragment
 import com.example.budgettracker.ui.fragments.MainBudgetFragment
+import com.example.budgettracker.ui.fragments.MainBudgetFragmentDirections
 
-class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
-//class BudgetAdapter() : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+//class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+class BudgetAdapter() : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BudgetViewHolder {
         return BudgetViewHolder(
@@ -51,7 +52,8 @@ class BudgetAdapter(private var budgets: List<Budget>) : RecyclerView.Adapter<Bu
 //        }
 
         holder.itemView.setOnClickListener {
-            holder.itemView.findNavController().navigate(R.id.mainBudgetToDetailFragment)
+            val action = MainBudgetFragmentDirections.mainBudgetToDetailFragment(transaction)
+            holder.itemView.findNavController().navigate(action)
         }
     }
 

@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -80,7 +81,7 @@ class MainBudgetFragment : Fragment() {
 
        //budgets = budgetDatabase.getBudgetDao().getBudgetItems()
 
-        budgetAdapter = BudgetAdapter(budgets)
+        budgetAdapter = BudgetAdapter()
         linearLayoutManager = LinearLayoutManager(context)
 
             // swipe to remove

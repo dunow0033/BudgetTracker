@@ -68,7 +68,7 @@ class AddTransactionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        budgetAdapter = BudgetAdapter(budgets)
+        budgetAdapter = BudgetAdapter()
 
         binding.addTransactionBtn.setOnClickListener {
             val label = binding.labelInput.text.toString()

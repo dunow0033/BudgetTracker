@@ -34,5 +34,8 @@
         <action
             android:id="@+id/DetailFragmentToMainBudget"
             app:destination="@id/fragmentMainBudget" />
+        <argument
+            android:name="budget"
+            app:argType="com.example.budgettracker.model.Budget" />
     </fragment>
 </navigation>
