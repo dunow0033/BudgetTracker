@@ -104,12 +104,6 @@ class AddTransactionFragment : Fragment() {
                 val budget = Budget(label = label, amount = amount, description = description)
                 insert(budget)
             }
-
-
-
-//            val budgetDao = BudgetDatabase.getAppDatabase(getApplication())?.getBudgetDao()
-//            budgetDao?.insertBudgetItem(Budget(label = label, amount = parseDouble(amount), description = description))
-        // findNavController().navigate(R.id.AddTransactionFragmentToMainBudget)
         }
 
         binding.closeBtn.setOnClickListener {

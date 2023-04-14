@@ -7,14 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.budgettracker.R
 import com.example.budgettracker.databinding.FragmentDetailBinding
-//import kotlinx.android.synthetic.main.fragment_detailed.*
 import com.example.budgettracker.db.BudgetDatabase
 import com.example.budgettracker.model.Budget
 import com.example.budgettracker.repository.BudgetRepository
@@ -46,7 +44,6 @@ class DetailFragment : Fragment() {
 
     private lateinit var labelLayout: TextInputLayout
     private lateinit var amountLayout: TextInputLayout
-    private lateinit var updateBtn: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +54,6 @@ class DetailFragment : Fragment() {
 
         labelLayout = binding.labelLayout
         amountLayout = binding.amountLayout
-        updateBtn = binding.updateBtn
 
         return binding.root
     }
@@ -77,26 +73,27 @@ class DetailFragment : Fragment() {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
 
+        binding.labelInput.addTextChangedListener {
+            binding.updateBtn.visibility = View.VISIBLE
+            if(it!!.isNotEmpty())
+                labelLayout.error = null
+        }
+
+        binding.amountInput.addTextChangedListener {
+            binding.updateBtn.visibility = View.VISIBLE
+            if(it!!.isNotEmpty())
+                amountLayout.error = null
+        }
+
+        binding.descriptionInput.addTextChangedListener {
+            binding.updateBtn.visibility = View.VISIBLE
+        }
+
         binding.updateBtn.setOnClickListener {
+            val id = args.budget.id
             val label = binding.labelInput.text.toString()
             val description = binding.descriptionInput.text.toString()
             val amount = binding.amountInput.text.toString().toDoubleOrNull()
-
-            binding.labelInput.addTextChangedListener {
-                binding.updateBtn.visibility = View.VISIBLE
-                if(it!!.isNotEmpty())
-                    labelLayout.error = null
-            }
-
-            binding.amountInput.addTextChangedListener {
-                updateBtn.visibility = View.VISIBLE
-                if(it!!.isNotEmpty())
-                    amountLayout.error = null
-            }
-
-            binding.descriptionInput.addTextChangedListener {
-                binding.updateBtn.visibility = View.VISIBLE
-            }
 
             if(label.isEmpty())
                 labelLayout.error = "Please enter a valid label!!"
@@ -105,13 +102,9 @@ class DetailFragment : Fragment() {
                 amountLayout.error = "Please enter a valid amount!!"
 
             else {
-                val budget = Budget(label = label, amount = amount, description = description)
+                val budget = Budget(id = id, label = label, amount = amount, description = description)
                 update(budget)
             }
-
-//            val budgetDao = BudgetDatabase.getAppDatabase(getApplication())?.getBudgetDao()
-//            budgetDao?.insertBudgetItem(Budget(label = label, amount = parseDouble(amount), description = description))
-            // findNavController().navigate(R.id.AddTransactionFragmentToMainBudget)
         }
 
         binding.closeBtn.setOnClickListener {
@@ -121,9 +114,6 @@ class DetailFragment : Fragment() {
 
     @DelicateCoroutinesApi
     private fun update(budget: Budget) {
-//        val budgetDatabase = Room.databaseBuilder(requireContext(),
-//            BudgetDatabase::class.java,
-//            "budgets").build()
 
         GlobalScope.launch(Dispatchers.Main) {
             budgetViewModel.updateBudgetItem(budget)
