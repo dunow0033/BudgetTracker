@@ -1,7 +1,6 @@
 package com.example.budgettracker.ui.fragments
 
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,16 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.budgettracker.R
-import com.example.budgettracker.databinding.FragmentAddTransactionBinding
 import com.example.budgettracker.databinding.FragmentDetailBinding
+//import kotlinx.android.synthetic.main.fragment_detailed.*
 import com.example.budgettracker.db.BudgetDatabase
 import com.example.budgettracker.model.Budget
 import com.example.budgettracker.repository.BudgetRepository
@@ -36,8 +32,6 @@ class DetailFragment : Fragment() {
     private val binding: FragmentDetailBinding get() = _binding!!
 
     private val args by navArgs<DetailFragmentArgs>()
-
-    //private lateinit var budgetViewModel: BudgetViewModel
 
 //    private var label = binding.labelInput.text.toString()
 //    private var amount = binding.amountInput.text.toString().toDoubleOrNull()
@@ -60,8 +54,6 @@ class DetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
-
-        //budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
 
         labelLayout = binding.labelLayout
         amountLayout = binding.amountLayout
@@ -135,7 +127,6 @@ class DetailFragment : Fragment() {
 
         GlobalScope.launch(Dispatchers.Main) {
             budgetViewModel.updateBudgetItem(budget)
-            //budgetDatabase.getBudgetDao().insertAll(budget)
 
             findNavController().navigate(R.id.DetailFragmentToMainBudget)
         }

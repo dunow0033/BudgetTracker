@@ -58,7 +58,6 @@ class AddTransactionFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentAddTransactionBinding.inflate(inflater, container, false)
 
-        //budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
         budgets = arrayListOf()
 
         labelLayout = binding.labelLayout
@@ -120,13 +119,9 @@ class AddTransactionFragment : Fragment() {
 
     @DelicateCoroutinesApi
     private fun insert(budget: Budget) {
-//        val budgetDatabase = Room.databaseBuilder(requireContext(),
-//            BudgetDatabase::class.java,
-//            "budgets").build()
 
         GlobalScope.launch(Dispatchers.Main) {
             budgetViewModel.addBudgetItem(budget)
-            //budgetDatabase.getBudgetDao().insertAll(budget)
 
             findNavController().navigate(R.id.AddTransactionFragmentToMainBudget)
         }
